@@ -2,22 +2,20 @@ name: Casks
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   audit:
     runs-on: macos-26
+    env:
+      HOMEBREW_NO_AUTO_UPDATE: 1
+      HOMEBREW_NO_INSTALL_CLEANUP: 1
+      HOMEBREW_GITHUB_API_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v4
-      - name: Style
-        run: |
-          for cask in Casks/*.rb; do
-            [ -f "$cask" ] || continue
-            brew style "$cask"
-          done
-      - name: Audit published casks
-        if: github.event_name == 'push'
-        run: |
-          brew tap kirniy/tap
-          for cask in Casks/*.rb; do
-            [ -f "$cask" ] || continue
-            brew audit --cask --online "kirniy/tap/$(basename "$cask" .rb)"
-          done
+      - name: Tap the checked-out revision
+        run: brew tap kirniy/tap "$GITHUB_WORKSPACE"
+      - name: Check cask style
+        run: brew style "$GITHUB_WORKSPACE/Casks/aervane.rb"
+      - name: Audit the public release
+        run: brew audit --cask --online kirniy/tap/aervane
