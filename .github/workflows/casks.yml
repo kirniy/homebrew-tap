@@ -1,0 +1,23 @@
+name: Casks
+on:
+  push:
+  pull_request:
+jobs:
+  audit:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v4
+      - name: Style
+        run: |
+          for cask in Casks/*.rb; do
+            [ -f "$cask" ] || continue
+            brew style "$cask"
+          done
+      - name: Audit published casks
+        if: github.event_name == 'push'
+        run: |
+          brew tap kirniy/tap
+          for cask in Casks/*.rb; do
+            [ -f "$cask" ] || continue
+            brew audit --cask --online "kirniy/tap/$(basename "$cask" .rb)"
+          done
