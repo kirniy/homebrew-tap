@@ -1,6 +1,6 @@
 cask "aervane" do
-  version "0.2.0"
-  sha256 "34c6a12cb9ae9255eb37cd5a4e827b11e1251526dd6165b96ff70f6126263991"
+  version "0.3.0"
+  sha256 "3b6f6b21e31ea37a1d7b140dd2558cd403f77a5897ea8b6b8411ef7ac3705018"
 
   url "https://github.com/kirniy/aervane/releases/download/v#{version}/Aervane-#{version}-macos-arm64.zip"
   name "Aervane"
