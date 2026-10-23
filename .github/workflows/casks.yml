@@ -6,7 +6,11 @@ permissions:
   contents: read
 jobs:
   audit:
-    runs-on: macos-26
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-26, macos-26-intel]
+    runs-on: ${{ matrix.runner }}
     env:
       HOMEBREW_NO_AUTO_UPDATE: 1
       HOMEBREW_NO_INSTALL_CLEANUP: 1
@@ -19,3 +23,11 @@ jobs:
         run: brew style "$GITHUB_WORKSPACE/Casks/aervane.rb"
       - name: Audit the public release
         run: brew audit --cask --online kirniy/tap/aervane
+      - name: Install and verify the public universal app
+        run: |
+          brew install --cask kirniy/tap/aervane
+          codesign --verify --all-architectures --deep --strict /Applications/Aervane.app
+          xcrun stapler validate /Applications/Aervane.app
+          /Applications/Aervane.app/Contents/MacOS/Aervane --check-signing
+          lipo /Applications/Aervane.app/Contents/MacOS/Aervane -verify_arch arm64
+          lipo /Applications/Aervane.app/Contents/MacOS/Aervane -verify_arch x86_64

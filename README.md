@@ -12,7 +12,7 @@ Install the Developer ID-signed, notarized release:
 brew install --cask kirniy/tap/aervane
 ```
 
-Requires Apple Silicon and macOS 14 or later. Fan control is physically verified on the one-fan M4 Mac mini; other models remain unverified. Installation uses an immutable GitHub release archive with a pinned SHA-256 checksum.
+Supports Intel and Apple Silicon on macOS 13 or later, with linked multi-fan control and temperature monitoring on fanless Macs. [Compatibility details](https://github.com/kirniy/aervane/blob/main/docs/mac-compatibility.md). Installation uses an immutable GitHub release archive with a pinned SHA-256 checksum.
 
 Open Aervane from Applications after installation. On the first fan adjustment, approve its embedded helper in macOS. Update with `brew upgrade --cask kirniy/tap/aervane`.
 
